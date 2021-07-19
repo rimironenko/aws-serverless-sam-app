@@ -54,7 +54,7 @@ Resources:
         ApiEvent:
           Type: Api
           Properties:
-            Path: /books
+            Path: /books/{isbn}
             Method: get
             RestApiId:
               Ref: BooksApi
