@@ -1,0 +1,85 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  Stage:
+    Type: String
+    Description: Stage to deploy resources to
+    AllowedValues:
+      - stage
+      - production
+
+Resources:
+
+  MyLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: lambda-layer
+      CompatibleRuntimes:
+        - java8
+    Metadata:
+      BuildMethod: java8
+
+  BooksApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub "books-api-${Stage}"
+      StageName: !Ref Stage
+      MethodSettings:
+        - CachingEnabled: true
+          CacheTtlInSeconds: 3600
+          ResourcePath: '/*'
+          HttpMethod: '*'
+      TracingEnabled: true
+      Variables:
+        LAMBDA_ALIAS: !Ref Stage
+
+  GetItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${Stage}-books-get-all'
+      Runtime: java8
+      Handler: com.home.amazon.serverless.lambda.GetItemHandler::handleRequest
+      Timeout: 20
+      MemorySize: 512
+      CodeUri: get-item-service
+      AutoPublishAlias: !Ref Stage
+      Environment:
+        Variables:
+          TABLE: !Ref BooksTable
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref BooksTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /books
+            Method: get
+            RestApiId:
+              Ref: BooksApi
+      Layers:
+        - Ref: MyLayer
+    Metadata:
+      BuildMethod: makefile
+
+  BooksTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: isbn
+        Type: String
+      TableName: !Sub '${Stage}-books'
+      Tags:
+        project: my-project
+        environment: !Ref Stage
+      SSESpecification:
+        SSEEnabled: true
+
+Outputs:
+  ApiEndpoint:
+    Description: "API endpoint - Get All Books"
+    Value: !Sub "https://${BooksApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/books"
+  BooksTable:
+    Description: "DynamoDB table for books"
+    Value: !Ref BooksTable
