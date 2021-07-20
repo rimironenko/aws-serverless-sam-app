@@ -105,6 +105,49 @@ Resources:
     Metadata:
       BuildMethod: makefile
 
+  DeleteItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${Stage}-delete-item'
+      Runtime: java8
+      Handler: com.home.amazon.serverless.lambda.DeleteItemHandler::handleRequest
+      Timeout: 20
+      MemorySize: 512
+      CodeUri: delete-item-service
+      AutoPublishAlias: !Ref Stage
+      Environment:
+        Variables:
+          TABLE: !Ref BooksTable
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:DescribeTable
+                - dynamodb:DeleteItem
+              Resource: {
+                "Fn::Sub": [
+                    "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${tableName}",
+                  {
+                    "tableName": {
+                      "Ref": "BooksTable"
+                    }
+                  }
+                ]
+              }
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /books/{isbn}
+            Method: delete
+            RestApiId:
+              Ref: BooksApi
+      Layers:
+        - Ref: MyLayer
+    Metadata:
+      BuildMethod: makefile
+
 Outputs:
   ApiEndpoint:
     Description: "API endpoint - Get All Books"
