@@ -16,6 +16,8 @@ import java.util.Collections;
 
 public class PutItemHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
+    static final int STATUS_CODE_NO_CONTENT = 204;
+    static final int STATUS_CODE_CREATED = 201;
     private final DynamoDbEnhancedClient dbClient;
     private final String tableName;
     private final TableSchema<Book> bookTableSchema;
@@ -29,13 +31,13 @@ public class PutItemHandler implements RequestHandler<APIGatewayProxyRequestEven
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         String body = request.getBody();
-        int statusCode = 204;
+        int statusCode = STATUS_CODE_NO_CONTENT;
         if (StringUtils.isNotBlank(body)) {
             Book item = new Gson().fromJson(body, Book.class);
             if (item != null) {
                 DynamoDbTable<Book> booksTable = dbClient.table(tableName, bookTableSchema);
                 booksTable.putItem(item);
-                statusCode = 201;
+                statusCode = STATUS_CODE_CREATED;
             }
         }
         return new APIGatewayProxyResponseEvent().withStatusCode(statusCode)
