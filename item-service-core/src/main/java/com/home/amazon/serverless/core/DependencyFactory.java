@@ -1,4 +1,5 @@
-package com.home.amazon.serverless;
+
+package com.home.amazon.serverless.core;
 
 import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
 import software.amazon.awssdk.core.SdkSystemSetting;

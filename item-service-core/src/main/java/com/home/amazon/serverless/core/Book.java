@@ -1,4 +1,4 @@
-package com.home.amazon.serverless.model;
+package com.home.amazon.serverless.core;
 
 import com.google.gson.annotations.SerializedName;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
