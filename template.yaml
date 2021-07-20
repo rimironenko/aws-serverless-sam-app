@@ -150,7 +150,7 @@ Resources:
 
 Outputs:
   ApiEndpoint:
-    Description: "API endpoint - Get All Books"
+    Description: "API endpoint"
     Value: !Sub "https://${BooksApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/books"
   BooksTable:
     Description: "DynamoDB table for books"
