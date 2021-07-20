@@ -37,7 +37,7 @@ Resources:
   GetItemFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${Stage}-books-get-all'
+      FunctionName: !Sub '${Stage}-get-item'
       Runtime: java8
       Handler: com.home.amazon.serverless.lambda.GetItemHandler::handleRequest
       Timeout: 20
@@ -75,6 +75,35 @@ Resources:
         environment: !Ref Stage
       SSESpecification:
         SSEEnabled: true
+
+  PutItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${Stage}-put-item'
+      Runtime: java8
+      Handler: com.home.amazon.serverless.lambda.PutItemHandler::handleRequest
+      Timeout: 20
+      MemorySize: 512
+      CodeUri: put-item-service
+      AutoPublishAlias: !Ref Stage
+      Environment:
+        Variables:
+          TABLE: !Ref BooksTable
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref BooksTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /books
+            Method: post
+            RestApiId:
+              Ref: BooksApi
+      Layers:
+        - Ref: MyLayer
+    Metadata:
+      BuildMethod: makefile
 
 Outputs:
   ApiEndpoint:

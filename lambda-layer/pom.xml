@@ -83,6 +83,12 @@
             <version>2.8.7</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+
         <!-- Test Dependencies -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
