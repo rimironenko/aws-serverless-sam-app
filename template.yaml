@@ -148,6 +148,35 @@ Resources:
     Metadata:
       BuildMethod: makefile
 
+  UpdateItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${Stage}-update-item'
+      Runtime: java8
+      Handler: com.home.amazon.serverless.lambda.UpdateItemHandler::handleRequest
+      Timeout: 20
+      MemorySize: 512
+      CodeUri: update-item-service
+      AutoPublishAlias: !Ref Stage
+      Environment:
+        Variables:
+          TABLE: !Ref BooksTable
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref BooksTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /books
+            Method: put
+            RestApiId:
+              Ref: BooksApi
+      Layers:
+        - Ref: MyLayer
+    Metadata:
+      BuildMethod: makefile
+
 Outputs:
   ApiEndpoint:
     Description: "API endpoint"
