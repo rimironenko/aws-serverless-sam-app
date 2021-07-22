@@ -26,19 +26,12 @@ Resources:
     Properties:
       Name: !Sub "books-api-${Stage}"
       StageName: !Ref Stage
-      MethodSettings:
-        - CachingEnabled: true
-          CacheTtlInSeconds: 3600
-          ResourcePath: '/*'
-          HttpMethod: '*'
-      TracingEnabled: true
       Variables:
         LAMBDA_ALIAS: !Ref Stage
 
   GetItemFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${Stage}-get-item'
       Runtime: java8
       Handler: com.home.amazon.serverless.lambda.GetItemHandler::handleRequest
       Timeout: 20
@@ -70,17 +63,15 @@ Resources:
       PrimaryKey:
         Name: isbn
         Type: String
-      TableName: !Sub '${Stage}-books'
-      Tags:
-        project: my-project
-        environment: !Ref Stage
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
       SSESpecification:
         SSEEnabled: true
 
   PutItemFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${Stage}-put-item'
       Runtime: java8
       Handler: com.home.amazon.serverless.lambda.PutItemHandler::handleRequest
       Timeout: 20
@@ -109,7 +100,6 @@ Resources:
   DeleteItemFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${Stage}-delete-item'
       Runtime: java8
       Handler: com.home.amazon.serverless.lambda.DeleteItemHandler::handleRequest
       Timeout: 20
@@ -152,7 +142,6 @@ Resources:
   UpdateItemFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${Stage}-update-item'
       Runtime: java8
       Handler: com.home.amazon.serverless.lambda.UpdateItemHandler::handleRequest
       Timeout: 20
@@ -182,6 +171,3 @@ Outputs:
   ApiEndpoint:
     Description: "API endpoint"
     Value: !Sub "https://${BooksApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/books"
-  BooksTable:
-    Description: "DynamoDB table for books"
-    Value: !Ref BooksTable
