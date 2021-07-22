@@ -60,16 +60,6 @@
         </dependency>
 
         <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>codedeploy</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>lambda</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-events</artifactId>
             <version>3.0.0</version>
