@@ -71,8 +71,8 @@ Resources:
               Ref: BooksApi
       Layers:
         - Ref: MyLayer
-    # Metadata:
-      # BuildMethod: makefile
+    Metadata:
+      BuildMethod: makefile
 
   PutItemFunction:
     Type: AWS::Serverless::Function
@@ -99,8 +99,8 @@ Resources:
               Ref: BooksApi
       Layers:
         - Ref: MyLayer
-    # Metadata:
-     #  BuildMethod: makefile
+    Metadata:
+      BuildMethod: makefile
 
   DeleteItemFunction:
     Type: AWS::Serverless::Function
@@ -141,8 +141,8 @@ Resources:
               Ref: BooksApi
       Layers:
         - Ref: MyLayer
-    # Metadata:
-      # BuildMethod: makefile
+    Metadata:
+      BuildMethod: makefile
 
   UpdateItemFunction:
     Type: AWS::Serverless::Function
@@ -169,8 +169,8 @@ Resources:
               Ref: BooksApi
       Layers:
         - Ref: MyLayer
-    # Metadata:
-      # BuildMethod: makefile
+    Metadata:
+      BuildMethod: makefile
 
 Outputs:
   ApiEndpoint:
