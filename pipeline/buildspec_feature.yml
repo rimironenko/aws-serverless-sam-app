@@ -3,6 +3,7 @@ phases:
   install:
     runtime-versions:
       python: 3.8
+      java: corretto8
     commands:
       - pip install --upgrade pip
       - pip install --upgrade awscli aws-sam-cli
@@ -11,6 +12,11 @@ phases:
       - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
   build:
     commands:
+      - cd item-service-core/
+      - mvn install
+      - cd ../lambda-layer/
+      - mvn install
+      - cd ..
       - sam build --use-container --template ${SAM_TEMPLATE}
       - . ./assume-role.sh ${TESTING_PIPELINE_EXECUTION_ROLE} feature-deploy
       - sam deploy --stack-name $(echo ${FEATURE_BRANCH_NAME} | tr -cd '[a-zA-Z0-9-]')
