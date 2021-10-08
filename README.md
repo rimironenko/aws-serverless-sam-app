@@ -5,7 +5,7 @@ It is an AWS SAM application that implements a CRUD API with Lambda handlers wri
 
 The architecture of the application is in the picture given below.
 
-![image](https://miro.medium.com/max/1400/1*hkYSOC3c1xv9svTJOzgLsA.png)
+![Architecture](assets/Architecture.png)
 
 Please find the detailed description of this application in my Medium blog post: [AWS SAM for a serverless Java application](https://medium.com/@rostyslav.myronenko/aws-sam-for-a-serverless-java-application-505e1d58a737)
 
