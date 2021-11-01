@@ -10,6 +10,19 @@ Parameters:
       - stage
       - production
 
+Globals:
+  Function:
+    Runtime: java8
+    Timeout: 20
+    MemorySize: 512
+    AutoPublishAlias: !Ref Stage
+    Environment:
+      Variables:
+        TABLE: !Ref BooksTable
+    Layers:
+      - Ref: MyLayer
+    Tracing: Active
+
 Resources:
 
   # Lambda Layer for the Lambda functions
@@ -30,6 +43,7 @@ Resources:
       StageName: !Ref Stage
       Variables:
         LAMBDA_ALIAS: !Ref Stage
+      TracingEnabled: true
 
   # DynamoDB table
   BooksTable:
@@ -49,15 +63,8 @@ Resources:
   GetItemFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: java8
       Handler: com.home.amazon.serverless.lambda.GetItemHandler::handleRequest
-      Timeout: 20
-      MemorySize: 512
       CodeUri: get-item-service
-      AutoPublishAlias: !Ref Stage
-      Environment:
-        Variables:
-          TABLE: !Ref BooksTable
       Policies:
         - DynamoDBReadPolicy:
             TableName: !Ref BooksTable
@@ -69,23 +76,14 @@ Resources:
             Method: get
             RestApiId:
               Ref: BooksApi
-      Layers:
-        - Ref: MyLayer
     Metadata:
       BuildMethod: makefile
 
   PutItemFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: java8
       Handler: com.home.amazon.serverless.lambda.PutItemHandler::handleRequest
-      Timeout: 20
-      MemorySize: 512
       CodeUri: put-item-service
-      AutoPublishAlias: !Ref Stage
-      Environment:
-        Variables:
-          TABLE: !Ref BooksTable
       Policies:
         - DynamoDBWritePolicy:
             TableName: !Ref BooksTable
@@ -97,23 +95,14 @@ Resources:
             Method: post
             RestApiId:
               Ref: BooksApi
-      Layers:
-        - Ref: MyLayer
     Metadata:
       BuildMethod: makefile
 
   DeleteItemFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: java8
       Handler: com.home.amazon.serverless.lambda.DeleteItemHandler::handleRequest
-      Timeout: 20
-      MemorySize: 512
       CodeUri: delete-item-service
-      AutoPublishAlias: !Ref Stage
-      Environment:
-        Variables:
-          TABLE: !Ref BooksTable
       Policies:
         - Version: '2012-10-17'
           Statement:
@@ -139,18 +128,13 @@ Resources:
             Method: delete
             RestApiId:
               Ref: BooksApi
-      Layers:
-        - Ref: MyLayer
     Metadata:
       BuildMethod: makefile
 
   UpdateItemFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: java8
       Handler: com.home.amazon.serverless.lambda.UpdateItemHandler::handleRequest
-      Timeout: 20
-      MemorySize: 512
       CodeUri: update-item-service
       AutoPublishAlias: !Ref Stage
       Environment:
@@ -167,8 +151,6 @@ Resources:
             Method: put
             RestApiId:
               Ref: BooksApi
-      Layers:
-        - Ref: MyLayer
     Metadata:
       BuildMethod: makefile
 
