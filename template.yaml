@@ -52,9 +52,6 @@ Resources:
       PrimaryKey:
         Name: isbn
         Type: String
-      ProvisionedThroughput:
-        ReadCapacityUnits: 1
-        WriteCapacityUnits: 1
       SSESpecification:
         SSEEnabled: true
 
