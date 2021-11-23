@@ -12,7 +12,7 @@ Parameters:
 
 Globals:
   Function:
-    Runtime: java8
+    Runtime: java8.al2
     Timeout: 20
     MemorySize: 512
     AutoPublishAlias: !Ref Stage
