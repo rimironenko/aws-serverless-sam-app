@@ -28,7 +28,6 @@ Globals:
     Layers:
       - Ref: MyLayer
       - 'arn:aws:lambda:us-east-1:157417159150:layer:AWSCodeGuruProfilerJavaAgentLayer:5'
-    Tracing: Active
 
 Resources:
 
@@ -72,6 +71,14 @@ Resources:
       Policies:
         - DynamoDBReadPolicy:
             TableName: !Ref BooksTable
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - "codeguru-profiler:ConfigureAgent"
+                - "codeguru-profiler:CreateProfilingGroup"
+                - "codeguru-profiler:PostAgentProfile"
+              Resource: '*'
       Events:
         ApiEvent:
           Type: Api
@@ -91,6 +98,14 @@ Resources:
       Policies:
         - DynamoDBWritePolicy:
             TableName: !Ref BooksTable
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - "codeguru-profiler:ConfigureAgent"
+                - "codeguru-profiler:CreateProfilingGroup"
+                - "codeguru-profiler:PostAgentProfile"
+              Resource: '*'
       Events:
         ApiEvent:
           Type: Api
@@ -124,6 +139,12 @@ Resources:
                   }
                 ]
               }
+            - Effect: Allow
+              Action:
+                - "codeguru-profiler:ConfigureAgent"
+                - "codeguru-profiler:CreateProfilingGroup"
+                - "codeguru-profiler:PostAgentProfile"
+              Resource: '*'
       Events:
         ApiEvent:
           Type: Api
@@ -147,6 +168,14 @@ Resources:
       Policies:
         - DynamoDBWritePolicy:
             TableName: !Ref BooksTable
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - "codeguru-profiler:ConfigureAgent"
+                - "codeguru-profiler:CreateProfilingGroup"
+                - "codeguru-profiler:PostAgentProfile"
+              Resource: '*'
       Events:
         ApiEvent:
           Type: Api
