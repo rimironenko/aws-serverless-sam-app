@@ -35,9 +35,7 @@ public class GetItemHandler implements RequestHandler<APIGatewayProxyRequestEven
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent input, Context context) {
-        context.getLogger().log("Inside the handler");
         String response = StringUtils.EMPTY;
-        context.getLogger().log("Inside the handler");
         DynamoDbTable<Book> booksTable = getClient().table(tableName, bookTableSchema);
         Map<String, String> pathParameters = input.getPathParameters();
         if (pathParameters != null) {
